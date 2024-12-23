@@ -17,6 +17,9 @@ INSTALLED_APPS += [
     "silk",
     "drf_spectacular",
     "custom_commands",
+    'users',
+    'movies',
+    'finance',
 ]
 
 MIDDLEWARE += [

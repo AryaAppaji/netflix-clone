@@ -16,6 +16,9 @@ INSTALLED_APPS += [
     "rest_framework.authtoken",
     "silk",
     "drf_spectacular",
+    'users',
+    'movies',
+    'finance',
 ]
 
 MIDDLEWARE += [
