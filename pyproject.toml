@@ -11,20 +11,14 @@ dependencies = [
   "drf-spectacular>=0.28.0",     # Automatically generates API documentation.
   "django-redis>=5.4.0",         # Integrates Redis as a cache backend.
   "channels>=4.2.0",             # Enables WebSocket communication.
-  "mysqlclient>=2.2.6",          # Provides support for MySQL database.
   "psycopg>=3.2.3",              # Provides support for PostgreSQL database.
-  "djongo>=1.2.31",              # Enables MongoDB integration with Django.
-  "oracledb>=2.5.1",             # Enables OracleDB integration with Django.
-  "django-mssql-backend>=2.8.1", # Enables MSSQL database integration with Django.
-  "mariadb>=1.1.11",             # Provides support for MariaDB database.
   "requests>=2.32.3",            # Allows Django applications to interact with external APIs.
   "django-silk>=5.3.1",          # Provides request/response monitoring and profiling.
   "ruff>=0.8.3",                 # Python linter and formatter.
-  "jinja2>=3.1.4",               # Adds support for Jinja templates.
   "pytest-django>=4.9.0",        # Facilitates unit testing with Django.
 ]
-description = "This project aims to simplify Django project setup by including the most useful packages."
-name = "drf-api-kickstart"
+description = "This is a practice project where i will replicate netflix like backend system using django."
+name = "netflix-clone"
 readme = "README.md"
 requires-python = ">=3.13"
 version = "0.1.0"
