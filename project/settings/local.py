@@ -10,6 +10,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 TIME_ZONE = env.str("TIME_ZONE", "Asia/Kolkata")
 SECRET_KEY = env.str("DJANGO_SECRET_KEY", get_random_secret_key())
 DEBUG = env.bool("DJANGO_DEBUG", True)
+AUTH_USER_MODEL = "users.CustomUser"
 
 INSTALLED_APPS += [
     "rest_framework",
@@ -17,9 +18,9 @@ INSTALLED_APPS += [
     "silk",
     "drf_spectacular",
     "custom_commands",
-    'users',
-    'movies',
-    'finance',
+    "users",
+    "movies",
+    "finance",
 ]
 
 MIDDLEWARE += [
