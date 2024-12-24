@@ -41,9 +41,9 @@ class Payment(models.Model):
         Subscription,
         db_index=True,
         on_delete=models.CASCADE,
-        related_name="subscription_details",
+        related_name="subscription",
     )
-    mode_of_payment = models.ForeignKey(
+    payment_mode = models.ForeignKey(
         PaymentMode,
         db_index=True,
         on_delete=models.CASCADE,
@@ -60,3 +60,24 @@ class Payment(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user.username}-{self.date}-{self.amount}"
+
+
+class UserSubscription(models.Model):
+    user = models.ForeignKey(
+        CustomUser,
+        db_index=True,
+        on_delete=models.CASCADE,
+        related_name="user_subscription",
+    )
+    subscription = models.ForeignKey(
+        Subscription,
+        db_index=True,
+        on_delete=models.CASCADE,
+        related_name="subscription_details",
+    )
+    start_date = models.DateTimeField(auto_now_add=True)
+    end_date = models.DateTimeField()
+    is_current_subscription = models.BooleanField()
+
+    class Meta:
+        db_table = "user_subscriptions"
