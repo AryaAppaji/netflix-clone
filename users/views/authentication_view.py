@@ -2,11 +2,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.utils import timezone
 from datetime import timedelta
-from ..models import ExpiringToken, CustomUser
+from ..models import ExpiringToken
 from ..serializers.login_serializer import LoginSerializer, UserDataSerializer
 from rest_framework import status
 from django.contrib.auth import authenticate
-from users.authentication import ExpiringTokenAuthentication
 
 
 class LoginView(APIView):
@@ -24,7 +23,7 @@ class LoginView(APIView):
             )
         ExpiringToken.objects.filter(user=user).delete()
         token = ExpiringToken.objects.create(
-            user=user, expires_at=timezone.now() + timedelta(seconds=60)
+            user=user, expires_at=timezone.now() + timedelta(days=1)
         )
 
         return Response(
