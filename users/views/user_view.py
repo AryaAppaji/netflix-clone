@@ -14,23 +14,29 @@ from ..serializers.user_serializer import (
 )
 
 from rest_framework.pagination import PageNumberPagination
+from users.authentication import ExpiringTokenAuthentication
 
 
 class UserPagination(PageNumberPagination):
     page_size = 10
-    page_size_query_param = 'page_size'
+    page_size_query_param = "page_size"
     max_page_size = 100
 
 
 class UserViewSet(ViewSet):
     pagination_class = UserPagination  # Add this line to use pagination_class
+    authentication_classes = [ExpiringTokenAuthentication]
 
     def list(self, request):
         users = CustomUser.objects.filter()
         paginator = self.pagination_class()  # Use the pagination class here
-        paginated_users = paginator.paginate_queryset(users, request)  # Apply pagination
+        paginated_users = paginator.paginate_queryset(
+            users, request
+        )  # Apply pagination
         serialized_data = UserListSerializer(paginated_users, many=True).data
-        return paginator.get_paginated_response(serialized_data)  # Return paginated response
+        return paginator.get_paginated_response(
+            serialized_data
+        )  # Return paginated response
 
     def create(self, request):
         serializer = CreateUserSerializer(data=request.data)
@@ -43,7 +49,9 @@ class UserViewSet(ViewSet):
                 username=serializer.validated_data["username"],
                 email=serializer.validated_data["email"],
                 password=serializer.validated_data["password"],
-                mobile_number=serializer.validated_data.get("mobile_number"),  # Correct field
+                mobile_number=serializer.validated_data.get(
+                    "mobile_number"
+                ),  # Correct field
             )
         except Exception as e:
             logger = logging.getLogger("django")
@@ -68,7 +76,9 @@ class UserViewSet(ViewSet):
         user = get_object_or_404(CustomUser, id=pk)
 
         # Use UpdateUserSerializer (if needed) for validation
-        serializer = UpdateUserSerializer(user, data=request.data, partial=True)  # partial=True allows partial updates
+        serializer = UpdateUserSerializer(
+            user, data=request.data, partial=True
+        )  # partial=True allows partial updates
         if not serializer.is_valid():
             return Response(
                 serializer.errors, status.HTTP_422_UNPROCESSABLE_ENTITY
@@ -76,11 +86,17 @@ class UserViewSet(ViewSet):
 
         try:
             # Update fields and save user
-            user.username = serializer.validated_data.get("username", user.username)
+            user.username = serializer.validated_data.get(
+                "username", user.username
+            )
             user.email = serializer.validated_data.get("email", user.email)
-            if 'password' in serializer.validated_data:
-                user.set_password(serializer.validated_data["password"])  # Use `set_password` for passwords
-            user.mobile_number = serializer.validated_data.get("mobile_number", user.mobile_number)
+            if "password" in serializer.validated_data:
+                user.set_password(
+                    serializer.validated_data["password"]
+                )  # Use `set_password` for passwords
+            user.mobile_number = serializer.validated_data.get(
+                "mobile_number", user.mobile_number
+            )
             user.save()
 
         except Exception as e:

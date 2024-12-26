@@ -21,11 +21,15 @@ from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularRedocView,
 )
+from users.views.authentication_view import (
+    LoginView,
+    LogoutView,
+)
 from users.views.user_view import UserViewSet
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r'user', UserViewSet,basename='users')
+router.register(r"user", UserViewSet, basename="users")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -36,5 +40,7 @@ urlpatterns = [
         SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     ),
-    path('api/', include(router.urls))
+    path("api/login", LoginView.as_view(), name="login"),
+    path("api/logout", LogoutView.as_view(), name="logout"),
+    path("api/", include(router.urls)),
 ]
