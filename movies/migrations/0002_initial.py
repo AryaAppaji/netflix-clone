@@ -6,22 +6,27 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('movies', '0001_initial'),
+        ("movies", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='review',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='reviews', to=settings.AUTH_USER_MODEL),
+            model_name="review",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="reviews",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddConstraint(
-            model_name='moviegenre',
-            constraint=models.UniqueConstraint(fields=('movie', 'genre'), name='unique_movie_genre'),
+            model_name="moviegenre",
+            constraint=models.UniqueConstraint(
+                fields=("movie", "genre"), name="unique_movie_genre"
+            ),
         ),
     ]
