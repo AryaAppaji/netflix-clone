@@ -27,11 +27,13 @@ from users.views.authentication_view import (
 )
 from users.views.user_view import UserViewSet
 from movies.views.genre_view import GenreViewSet
+from finance.views.subscription_view import SubscriptionViewSet
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r"user", UserViewSet, basename="users")
 router.register(r"genre", GenreViewSet, basename="genre")
+router.register(r"subscription", SubscriptionViewSet, basename="subscription")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
