@@ -56,8 +56,8 @@ class GenreViewSet(ViewSet):
         )
 
     def retrieve(self, request, pk):
-        user = get_object_or_404(Genre, id=pk)
-        serialized_data = RetrieveGenreSerializer(user).data
+        genre = get_object_or_404(Genre, id=pk)
+        serialized_data = RetrieveGenreSerializer(genre).data
         return Response(serialized_data, status.HTTP_200_OK)
 
     def update(self, request, pk):
@@ -85,15 +85,15 @@ class GenreViewSet(ViewSet):
         )
 
     def destroy(self, request, pk):
-        user = get_object_or_404(Genre, pk=pk)
+        genre = get_object_or_404(Genre, pk=pk)
 
         try:
-            user.delete()
+            genre.delete()
         except Exception as e:
             logger = logging.getLogger("django")
-            logger.error(f"User Deletion Failed: {str(e)}")
+            logger.error(f"Genre Deletion Failed: {str(e)}")
             return Response(
-                {"msg": "User Deletion Failed"},
+                {"msg": "Genre Deletion Failed"},
                 status.HTTP_417_EXPECTATION_FAILED,
             )
 
