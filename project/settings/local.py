@@ -83,8 +83,8 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Your Project Name",
-    "DESCRIPTION": "Your Project Description",
+    "TITLE": "Netflix clone",
+    "DESCRIPTION": "This is a practice project on django",
     "VERSION": "1.0.0",
     "SCHEMA_PATH_PREFIX": "/api/",
 }
