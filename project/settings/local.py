@@ -88,3 +88,12 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "1.0.0",
     "SCHEMA_PATH_PREFIX": "/api/",
 }
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = env.str("EMAIL_HOST")
+EMAIL_HOST_USER = env.str("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = env.int("EMAIL_PORT")
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS")
+EMAIL_USE_SSL = env.bool("EMAIL_USE_SSL")
+DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL")
