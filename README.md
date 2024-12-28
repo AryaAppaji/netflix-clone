@@ -1,48 +1,25 @@
-# Django Project Template
+# Django Rest Framework (DRF) Practice Project
 
-This repository serves as a template for setting up Django projects quickly and easily. It includes essential configuration and packages to streamline the development of common backend features. Ideal for developers looking for a reliable starting point, this template supports multiple databases, external storage integration, and real-time WebSocket communication.
+This is a practice project using Django Rest Framework (DRF) to build a Netflix-like system.
 
-## Features
+For setup instructions, please refer to [SETUP.md](SETUP.md).
 
-- **Multi-Environment Setup**  
-  Pre-configured settings for development, staging, and production environments, allowing you to switch between them effortlessly by adjusting environment variables.
+## Concepts Covered
 
-- **Database Support**  
-  Packages included for the following databases:
+This project demonstrates the use of the following key DRF concepts:
 
-  - MySQL
-  - PostgreSQL
-  - MSSQL
-  - MariaDB
-  - MongoDB
-  - OracleDB
-
-- **Django REST Framework (DRF)**  
-  A pre-configured setup for building RESTful APIs using DRF, saving time on setup and integration.
-
-- **Django-Storages Integration**  
-  Seamless integration with `django-storages` for easy communication with external storage systems, such as Amazon S3.
-
-- **WebSocket Support (Channels)**  
-  Real-time communication capabilities through WebSocket support via Django Channels.
-
-- **Pre-built custom-commands for faster development**
-  `add_model` - Adds the basic sacaffold for given model name to the given app.
-
-  `make_custom_command` - Adds the boilerplate to create a custom command.
-
-  `make_view` - Adds the boilerplate to create a view file in given app.
-
-  `removeapp` - Removes the given app from the project.
-
-  `set_secret_key` - Creates the secret key for the selected environment and adds it to the `.env` file.
-
-  `setup_crud_view` - Creates a view for the CRUD operations along with their serializers under the given app.
-
-  `startapp` - Customized the built-in startapp command to include additional directories and add the newly created app to the settings file.
-
-  To know how to use this template see [SETUP.md](SETUP.md)
+1. **Models**
+2. **Views**
+3. **Templates**
+4. **URL Routing**
+5. **Serializers**
+6. **Viewsets and APIView**
+7. **Pagination**
+8. **Environment Variable Management**
+9. **Signals**
+10. **API Documentation with `drf-spectacular`**
 
 ## Acknowledgments
 
-Parts of this project are inspired by the [HackSoft Styleguide Example](https://github.com/HackSoftware/Django-Styleguide-Example), which is licensed under the MIT License.
+- Parts of this project are inspired by the [HackSoft Styleguide Example](https://github.com/HackSoftware/Django-Styleguide-Example), licensed under the MIT License.
+- The project structure is derived from [DRF API Kickstart](https://github.com/AryaAppaji/drf-api-kickstart), also licensed under the MIT License.
