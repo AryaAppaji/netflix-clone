@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import CustomUser
+from .services.file_management_service import FileManagementService
 
 
 # Genre Model
@@ -21,8 +22,15 @@ class Movie(models.Model):
     name = models.CharField(max_length=30)
     release_year = models.IntegerField()
     description = models.TextField()
-    average_rating = models.FloatField()
-    genres = models.ManyToManyField(Genre, through="MovieGenre", db_index=True)
+    average_rating = models.FloatField(default=0, blank=True, null=True)
+    genres = models.ManyToManyField(
+        "Genre", through="MovieGenre", db_index=True
+    )
+    file = models.FileField(
+        upload_to=FileManagementService.upload_movie,
+        blank=True,
+        null=True,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

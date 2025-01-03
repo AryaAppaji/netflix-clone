@@ -13,6 +13,7 @@ DEBUG = env.bool("DJANGO_DEBUG", True)
 AUTH_USER_MODEL = "users.CustomUser"
 
 INSTALLED_APPS += [
+    "storages",
     "rest_framework",
     "rest_framework.authtoken",
     "silk",
@@ -97,3 +98,73 @@ EMAIL_PORT = env.int("EMAIL_PORT")
 EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS")
 EMAIL_USE_SSL = env.bool("EMAIL_USE_SSL")
 DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL")
+
+APPEND_SLASH = True
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "media/"
+'''
+# AWS Credentials
+
+AWS_ACCESS_KEY_ID = env.str("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = env.str("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_REGION_NAME = env.str("AWS_REGION")
+AWS_S3_ENDPOINT_URL = env.str("AWS_S3_ENDPOINT_URL")
+# Default File Storage
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
+AWS_DEFAULT_ACL = (
+    "public-read"  # Set file permissions (public-read or private)
+)
+AWS_QUERYSTRING_AUTH = False  # Disable querystring authentication
+AWS_S3_FILE_OVERWRITE = (
+    False  # Prevent overwriting existing files with the same name
+)
+AWS_LOCATION = "media"
+
+MEDIA_URL = (
+    f"http://s3.ap-southeast-1.wasabisys.com/{AWS_STORAGE_BUCKET_NAME}/"
+)
+'''
+# STATIC_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/static/'
+'''
+AWS_ACCESS_KEY_ID = env.str("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = env.str("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_REGION_NAME = env.str("AWS_REGION")
+AWS_S3_CUSTOM_DOMAIN = env.str("AWS_S3_ENDPOINT_URL")
+# Static files settings
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# Media files settings
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# STORAGES configuration
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        #"OPTIONS": {
+         #   "access_key": AWS_ACCESS_KEY_ID,
+          #  "secret_key": AWS_SECRET_ACCESS_KEY,
+           # "bucket_name": AWS_STORAGE_BUCKET_NAME,
+            #"region_name": AWS_S3_REGION_NAME,
+            #"custom_domain": AWS_S3_CUSTOM_DOMAIN,
+            #"file_overwrite": False,  # Optional
+        #}
+    },
+    "staticfiles": {
+        "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
+        #"OPTIONS": {
+         #   "access_key": AWS_ACCESS_KEY_ID,
+          #  "secret_key": AWS_SECRET_ACCESS_KEY,
+           # "bucket_name": AWS_STORAGE_BUCKET_NAME,
+            #"region_name": AWS_S3_REGION_NAME,
+            #"custom_domain": AWS_S3_CUSTOM_DOMAIN,
+            #"file_overwrite": False,  # Optional
+        #},
+    },
+}
+'''
