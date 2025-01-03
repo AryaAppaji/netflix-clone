@@ -13,6 +13,7 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 AUTH_USER_MODEL = "users.CustomUser"
 
 INSTALLED_APPS += [
+    "storages",
     "rest_framework",
     "rest_framework.authtoken",
     "silk",
@@ -84,3 +85,5 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "1.0.0",
     "SCHEMA_PATH_PREFIX": "/api/",
 }
+
+APPEND_SLASH = True
