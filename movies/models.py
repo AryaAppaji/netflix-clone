@@ -85,6 +85,7 @@ class Review(models.Model):
         related_name="movie_reviews",
     )  # Changed related_name
     rating = models.FloatField()
+    content = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

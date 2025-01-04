@@ -16,7 +16,7 @@ INSTALLED_APPS += [
     "storages",
     "rest_framework",
     "rest_framework.authtoken",
-    "silk",
+    "django_sonar",
     "drf_spectacular",
     "custom_commands",
     "users",
@@ -25,7 +25,7 @@ INSTALLED_APPS += [
 ]
 
 MIDDLEWARE += [
-    "silk.middleware.SilkyMiddleware",
+    "django_sonar.middlewares.requests.RequestsMiddleware",
 ]
 
 DATABASES = {
@@ -103,7 +103,7 @@ APPEND_SLASH = True
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "media/"
-'''
+"""
 # AWS Credentials
 
 AWS_ACCESS_KEY_ID = env.str("AWS_ACCESS_KEY_ID")
@@ -126,9 +126,9 @@ AWS_LOCATION = "media"
 MEDIA_URL = (
     f"http://s3.ap-southeast-1.wasabisys.com/{AWS_STORAGE_BUCKET_NAME}/"
 )
-'''
+"""
 # STATIC_URL = f'{AWS_S3_ENDPOINT_URL}/{AWS_STORAGE_BUCKET_NAME}/static/'
-'''
+"""
 AWS_ACCESS_KEY_ID = env.str("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = env.str("AWS_STORAGE_BUCKET_NAME")
@@ -167,4 +167,12 @@ STORAGES = {
         #},
     },
 }
-'''
+"""
+DJANGO_SONAR = {
+    "excludes": [
+        MEDIA_URL,
+        "/sonar/",
+        "/admin/",
+        "/__reload__/",
+    ],
+}

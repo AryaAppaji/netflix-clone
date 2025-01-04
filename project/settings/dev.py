@@ -16,7 +16,7 @@ INSTALLED_APPS += [
     "storages",
     "rest_framework",
     "rest_framework.authtoken",
-    "silk",
+    "django_sonar",
     "drf_spectacular",
     "users",
     "movies",
@@ -24,7 +24,7 @@ INSTALLED_APPS += [
 ]
 
 MIDDLEWARE += [
-    "silk.middleware.SilkyMiddleware",
+    "django_sonar.middlewares.requests.RequestsMiddleware",
 ]
 
 DATABASES = {
@@ -87,3 +87,11 @@ SPECTACULAR_SETTINGS = {
 }
 
 APPEND_SLASH = True
+
+DJANGO_SONAR = {
+    "excludes": [
+        "/sonar/",
+        "/admin/",
+        "/__reload__/",
+    ],
+}

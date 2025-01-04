@@ -13,6 +13,7 @@ from ..serializers.payment_mode_serializer import (
 from ..models import PaymentMode
 from rest_framework.pagination import PageNumberPagination
 import logging
+from users.authentication import ExpiringTokenAuthentication
 
 
 class PaymentModePagination(PageNumberPagination):
@@ -22,6 +23,8 @@ class PaymentModePagination(PageNumberPagination):
 
 
 class PaymentModeViewSet(ViewSet):
+    authentication_classes = [ExpiringTokenAuthentication]
+
     def list(self, request):
         payment_modes = PaymentMode.objects.all()
         serialized_data = PaymentModeListSerializer(

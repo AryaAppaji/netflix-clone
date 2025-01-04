@@ -6,10 +6,30 @@ from .models import ExpiringToken
 class ExpiringTokenAuthentication(TokenAuthentication):
     model = ExpiringToken
 
+    def authenticate(self, request):
+        """
+        Override the authenticate method to ensure token is provided.
+        """
+        auth = request.META.get("HTTP_AUTHORIZATION", "").split()
+
+        if not auth or len(auth) != 2:
+            raise AuthenticationFailed(
+                "Token was not provided, please provide one."
+            )
+
+        token = auth[1]  # Get token from the header
+
+        return self.authenticate_credentials(token)
+
     def authenticate_credentials(self, key):
         """
         Authenticate the token and ensure it has not expired.
         """
+        if not key:
+            raise AuthenticationFailed(
+                "Token was not provided, please provide one."
+            )
+
         try:
             token = self.model.objects.get(key=key)
         except self.model.DoesNotExist:
