@@ -13,6 +13,7 @@ from ..serializers.genre_serializer import (
     RetrieveGenreSerializer,
     UpdateGenreSerializer,
 )
+from users.authentication import ExpiringTokenAuthentication
 
 
 class GenrePagination(PageNumberPagination):
@@ -22,6 +23,8 @@ class GenrePagination(PageNumberPagination):
 
 
 class GenreViewSet(ViewSet):
+    authentication_classes = [ExpiringTokenAuthentication]
+
     def list(self, request):
         genres = Genre.objects.all()
         serialized_data = GenreListSerializer(genres, many=True).data

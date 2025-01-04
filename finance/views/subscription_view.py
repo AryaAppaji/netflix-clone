@@ -13,6 +13,7 @@ from ..serializers.subscription_serializer import (
 from rest_framework.pagination import PageNumberPagination
 import logging
 from ..models import Subscription
+from users.authentication import ExpiringTokenAuthentication
 
 
 class SubscriptionPagination(PageNumberPagination):
@@ -22,6 +23,8 @@ class SubscriptionPagination(PageNumberPagination):
 
 
 class SubscriptionViewSet(ViewSet):
+    authentication_classes = [ExpiringTokenAuthentication]
+
     def list(self, request):
         subscriptions = Subscription.objects.all()
         serialized_data = SubscriptionListSerializer(

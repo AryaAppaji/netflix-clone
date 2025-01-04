@@ -12,7 +12,7 @@ from ..serializers.movie_serializer import (
 from rest_framework.pagination import PageNumberPagination
 from ..models import Movie
 import logging
-from django.conf import settings
+from users.authentication import ExpiringTokenAuthentication
 
 
 class MoviePagination(PageNumberPagination):
@@ -21,6 +21,7 @@ class MoviePagination(PageNumberPagination):
 
 
 class MovieViewSet(ViewSet):
+    authentication_classes = [ExpiringTokenAuthentication]
     logger = logging.getLogger("django")
 
     def list(self, request):

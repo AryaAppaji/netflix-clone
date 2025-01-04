@@ -29,6 +29,7 @@ from users.views.authentication_view import (
 from users.views.user_view import UserViewSet
 from movies.views.genre_view import GenreViewSet
 from movies.views.movie_view import MovieViewSet
+from movies.views.movie_review_view import MovieReviewViewSet
 from finance.views.subscription_view import SubscriptionViewSet
 from finance.views.payment_mode_view import PaymentModeViewSet
 from rest_framework.routers import DefaultRouter
@@ -39,10 +40,11 @@ router.register(r"genre", GenreViewSet, basename="genres")
 router.register(r"subscription", SubscriptionViewSet, basename="subscriptions")
 router.register(r"payment-mode", PaymentModeViewSet, basename="payment_modes")
 router.register(r"movie", MovieViewSet, basename="movies")
+router.register(r"review", MovieReviewViewSet, basename="movie_reviews")
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("silk/", include("silk.urls")),
+    path("sonar/", include("django_sonar.urls")),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
         "api/redoc/",

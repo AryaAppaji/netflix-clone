@@ -12,11 +12,11 @@ dependencies = [
   "django-redis>=5.4.0", # Integrates Redis as a cache backend.
   "channels>=4.2.0", # Enables WebSocket communication.
   "psycopg>=3.2.3", # Provides support for PostgreSQL database.
-  "requests>=2.32.3", # Allows Django applications to interact with external APIs.
-  "django-silk>=5.3.1", # Provides request/response monitoring and profiling.
+  "requests>=2.32.3", # Provides request/response monitoring and profiling.
   "ruff>=0.8.3", # Python linter and formatter.
   "pytest-django>=4.9.0", # Facilitates unit testing with Django.
   "boto3>=1.35.91",
+  "django-sonar>=0.1.8",
 ]
 description = "This is a practice project where i will replicate netflix like backend system using django."
 name = "netflix-clone"
