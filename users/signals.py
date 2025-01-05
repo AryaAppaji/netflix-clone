@@ -9,7 +9,7 @@ from django.utils.timezone import now, timedelta
 
 
 @receiver(post_save, sender=CustomUser)
-def send_welcome_email(sender, instance, created, **kwargs):
+def handle_user_registration(sender, instance, created, **kwargs):
     if created:
         # Assigning Subscription.
         subscription_details = Subscription.objects.filter(
