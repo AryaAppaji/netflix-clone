@@ -8,7 +8,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = "__all__"
+        exclude = ["password"]
 
 
 # Movie Serializer
