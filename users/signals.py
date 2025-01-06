@@ -13,7 +13,7 @@ def handle_user_registration(sender, instance, created, **kwargs):
     if created:
         # Assigning Subscription.
         subscription_details = Subscription.objects.filter(
-            name__exact="Free"
+            name__exact="Trail"
         ).first()
 
         subscription_end_date = now() + timedelta(

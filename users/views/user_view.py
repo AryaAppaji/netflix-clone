@@ -25,9 +25,10 @@ class UserPagination(PageNumberPagination):
 
 class UserViewSet(ViewSet):
     pagination_class = UserPagination  # Add this line to use pagination_class
-    authentication_classes = [ExpiringTokenAuthentication]
+    
 
     def list(self, request):
+        authentication_classes = [ExpiringTokenAuthentication]
         users = CustomUser.objects.filter()
         paginator = self.pagination_class()  # Use the pagination class here
         paginated_users = paginator.paginate_queryset(
@@ -66,12 +67,13 @@ class UserViewSet(ViewSet):
         )
 
     def retrieve(self, request, pk):
-        # Directly use get_object_or_404 to raise 404 if user not found
+        authentication_classes = [ExpiringTokenAuthentication]
         user = get_object_or_404(CustomUser, id=pk)
         serialized_data = RetrieveUserSerializer(user).data
         return Response(serialized_data, status.HTTP_200_OK)
 
     def update(self, request, pk):
+        authentication_classes = [ExpiringTokenAuthentication]
         # Retrieve the user object
         user = get_object_or_404(CustomUser, id=pk)
 
@@ -112,6 +114,7 @@ class UserViewSet(ViewSet):
         )
 
     def destroy(self, request, pk):
+        authentication_classes = [ExpiringTokenAuthentication]
         user = get_object_or_404(CustomUser, id=pk)
         try:
             user.delete()
