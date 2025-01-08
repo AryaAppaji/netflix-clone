@@ -34,9 +34,12 @@ def handle_user_registration(sender, instance, created, **kwargs):
         to_email = instance.email  # recipient's email address
 
         # Render the HTML template
-        html_message = render_to_string("users/registration_successful.html", {
-            "days": subscription_details.validity,
-        })
+        html_message = render_to_string(
+            "users/registration_successful.html",
+            {
+                "days": subscription_details.validity,
+            },
+        )
 
         # Send the email
         send_mail(
@@ -45,4 +48,4 @@ def handle_user_registration(sender, instance, created, **kwargs):
             from_email=from_email,
             recipient_list=[to_email],
             html_message=html_message,
-        )        
+        )

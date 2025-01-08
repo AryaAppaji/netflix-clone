@@ -15,6 +15,7 @@ from ..models import Review
 from users.models import ExpiringToken
 import logging
 from users.authentication import ExpiringTokenAuthentication
+from rest_framework.permissions import IsAdminUser
 
 
 class MovieReviewPagination(PageNumberPagination):
@@ -24,6 +25,7 @@ class MovieReviewPagination(PageNumberPagination):
 
 class MovieReviewViewSet(ViewSet):
     authentication_classes = [ExpiringTokenAuthentication]
+    permission_classes = [IsAdminUser]
 
     def list(self, request):
         movies = Review.objects.all()
@@ -53,7 +55,7 @@ class MovieReviewViewSet(ViewSet):
         try:
             review.save()
         except Exception as e:
-            logger = logging.getLogger("django")
+            logger = logging.getLogger("custom")
             logger.error(f"Review Cretion Failed:{str(e)}")
             return Response(
                 {"msg": "Failed to add review"},
@@ -84,7 +86,7 @@ class MovieReviewViewSet(ViewSet):
         try:
             review.save()
         except Exception as e:
-            logger = logging.getLogger("django")
+            logger = logging.getLogger("custom")
             logger.error(f"Review Cretion Failed:{str(e)}")
             return Response(
                 {"msg": "Failed to add review"},
@@ -101,7 +103,7 @@ class MovieReviewViewSet(ViewSet):
         try:
             review.delete()
         except Exception as e:
-            logger = logging.getLogger("django")
+            logger = logging.getLogger("custom")
             logger.error(f"Review Deletion Failed:{str(e)}")
             return Response(
                 {"msg": "Failed to delete review"},

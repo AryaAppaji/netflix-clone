@@ -15,31 +15,24 @@ from ..serializers.user_serializer import (
 
 from rest_framework.pagination import PageNumberPagination
 from users.authentication import ExpiringTokenAuthentication
+from rest_framework.permissions import IsAdminUser
 
 
 # Pagination Class
 class UserPagination(PageNumberPagination):
     page_size = 10
     page_size_query_param = "page_size"
-    max_page_size = 25
 
 
 # Logger Initialization
-logger = logging.getLogger("django")
+logger = logging.getLogger("custom")
 
 
 # User ViewSet
 class UserViewSet(ViewSet):
     authentication_classes = [ExpiringTokenAuthentication]
+    permission_classes = [IsAdminUser]
     pagination_class = UserPagination
-
-    def get_authenticators(self):
-        """
-        Skip authentication for 'create' method.
-        """
-        if self.request.method == 'POST':  # 'POST' is used for the 'create' method
-            return []  # Skip authentication for create method
-        return super().get_authenticators()
 
     def list(self, request):
         users = CustomUser.objects.all()
@@ -51,21 +44,38 @@ class UserViewSet(ViewSet):
     def create(self, request):
         serializer = CreateUserSerializer(data=request.data)
         if not serializer.is_valid():
-            return Response(serializer.errors, status.HTTP_422_UNPROCESSABLE_ENTITY)
-        try:
-            CustomUser.objects.create_user(
-                username=serializer.validated_data["username"],
-                email=serializer.validated_data["email"],
-                password=serializer.validated_data["password"],
-                mobile_number=serializer.validated_data.get("mobile_number"),
+            return Response(
+                serializer.errors, status.HTTP_422_UNPROCESSABLE_ENTITY
             )
+        try:
+            if self.validated_data["is_superuser"]:
+                CustomUser.objects.create_superuser(
+                    username=serializer.validated_data["username"],
+                    email=serializer.validated_data["email"],
+                    password=serializer.validated_data["password"],
+                    mobile_number=serializer.validated_data.get(
+                        "mobile_number"
+                    ),
+                )
+            else:
+                CustomUser.objects.create_user(
+                    username=serializer.validated_data["username"],
+                    email=serializer.validated_data["email"],
+                    password=serializer.validated_data["password"],
+                    mobile_number=serializer.validated_data.get(
+                        "mobile_number"
+                    ),
+                )
         except Exception as e:
             logger.error(f"User Creation Failed: {str(e)}")
             return Response(
-                {"msg": "Registration Failed"}, status.HTTP_417_EXPECTATION_FAILED
+                {"msg": "Registration Failed"},
+                status.HTTP_417_EXPECTATION_FAILED,
             )
 
-        return Response({"msg": "Registered Successfully"}, status.HTTP_201_CREATED)
+        return Response(
+            {"msg": "Registered Successfully"}, status.HTTP_201_CREATED
+        )
 
     def retrieve(self, request, pk):
         user = get_object_or_404(CustomUser, id=pk)
@@ -74,25 +84,37 @@ class UserViewSet(ViewSet):
 
     def update(self, request, pk):
         user = get_object_or_404(CustomUser, id=pk)
-        serializer = UpdateUserSerializer(user, data=request.data, partial=True)
+        serializer = UpdateUserSerializer(
+            user, data=request.data, partial=True
+        )
         if not serializer.is_valid():
-            return Response(serializer.errors, status.HTTP_422_UNPROCESSABLE_ENTITY)
+            return Response(
+                serializer.errors, status.HTTP_422_UNPROCESSABLE_ENTITY
+            )
         try:
-            user.username = serializer.validated_data.get("username", user.username)
+            user.username = serializer.validated_data.get(
+                "username", user.username
+            )
             user.email = serializer.validated_data.get("email", user.email)
             if "password" in serializer.validated_data:
                 user.set_password(serializer.validated_data["password"])
             user.mobile_number = serializer.validated_data.get(
                 "mobile_number", user.mobile_number
             )
+            user.is_superuser = serializer.validated_data.get(
+                "is_superuser", False
+            )
             user.save()
         except Exception as e:
             logger.error(f"User Update Failed: {str(e)}")
             return Response(
-                {"msg": "User update failed"}, status.HTTP_417_EXPECTATION_FAILED
+                {"msg": "User update failed"},
+                status.HTTP_417_EXPECTATION_FAILED,
             )
 
-        return Response({"msg": "User updated successfully"}, status.HTTP_200_OK)
+        return Response(
+            {"msg": "User updated successfully"}, status.HTTP_200_OK
+        )
 
     def destroy(self, request, pk):
         user = get_object_or_404(CustomUser, id=pk)
@@ -101,7 +123,8 @@ class UserViewSet(ViewSet):
         except Exception as e:
             logger.error(f"User Deletion Failed: {str(e)}")
             return Response(
-                {"msg": "User Deletion Failed"}, status.HTTP_417_EXPECTATION_FAILED
+                {"msg": "User Deletion Failed"},
+                status.HTTP_417_EXPECTATION_FAILED,
             )
 
         return Response(None, status.HTTP_204_NO_CONTENT)

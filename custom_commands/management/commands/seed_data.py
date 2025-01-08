@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from finance.seeders import (
     seed_subscriptions,
 )
-from users.seeders import(
+from users.seeders import (
     seed_users,
 )
 
