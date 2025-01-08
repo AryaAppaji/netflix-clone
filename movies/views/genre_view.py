@@ -14,6 +14,7 @@ from ..serializers.genre_serializer import (
     UpdateGenreSerializer,
 )
 from users.authentication import ExpiringTokenAuthentication
+from rest_framework.permissions import IsAdminUser
 
 
 class GenrePagination(PageNumberPagination):
@@ -24,6 +25,7 @@ class GenrePagination(PageNumberPagination):
 
 class GenreViewSet(ViewSet):
     authentication_classes = [ExpiringTokenAuthentication]
+    permission_classes = [IsAdminUser]
 
     def list(self, request):
         genres = Genre.objects.all()
@@ -48,7 +50,7 @@ class GenreViewSet(ViewSet):
         try:
             genre.save()
         except Exception as e:
-            logger = logging.getLogger("django")
+            logger = logging.getLogger("custom")
             logger.error(f"Genre Creation Failed: {str(e)}")
             return Response(
                 {"msg": "Genre Creation Failed"},
@@ -77,7 +79,7 @@ class GenreViewSet(ViewSet):
             genre.status = serializer.validated_data["status"]
             genre.save()
         except Exception as e:
-            logger = logging.getLogger("django")
+            logger = logging.getLogger("custom")
             logger.error(f"Genre Update Failed: {str(e)}")
             return Response(
                 {"msg": str(e)}, status=status.HTTP_417_EXPECTATION_FAILED
@@ -93,7 +95,7 @@ class GenreViewSet(ViewSet):
         try:
             genre.delete()
         except Exception as e:
-            logger = logging.getLogger("django")
+            logger = logging.getLogger("custom")
             logger.error(f"Genre Deletion Failed: {str(e)}")
             return Response(
                 {"msg": "Genre Deletion Failed"},

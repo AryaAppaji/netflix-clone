@@ -14,6 +14,7 @@ from rest_framework.pagination import PageNumberPagination
 import logging
 from ..models import Subscription
 from users.authentication import ExpiringTokenAuthentication
+from rest_framework.permissions import IsAdminUser
 
 
 class SubscriptionPagination(PageNumberPagination):
@@ -24,6 +25,7 @@ class SubscriptionPagination(PageNumberPagination):
 
 class SubscriptionViewSet(ViewSet):
     authentication_classes = [ExpiringTokenAuthentication]
+    permission_classes = [IsAdminUser]
 
     def list(self, request):
         subscriptions = Subscription.objects.all()
@@ -50,7 +52,7 @@ class SubscriptionViewSet(ViewSet):
         try:
             subscription.save()
         except Exception as e:
-            logger = logging.getLogger("django")
+            logger = logging.getLogger("custom")
             logger.error(f"Subscription creation Failed: {str(e)}")
             return Response(
                 {"msg": "Failed to create subscription"},
@@ -81,7 +83,7 @@ class SubscriptionViewSet(ViewSet):
         try:
             subscription.save()
         except Exception as e:
-            logger = logging.getLogger("django")
+            logger = logging.getLogger("custom")
             logger.error(f"Subscription creation Failed: {str(e)}")
             return Response(
                 {"msg": "Failed to create subscription"},
@@ -97,7 +99,7 @@ class SubscriptionViewSet(ViewSet):
         try:
             subscription.delete()
         except Exception as e:
-            logger = logging.getLogger("django")
+            logger = logging.getLogger("custom")
             logger.error(f"Subscription Delete Failed:{str(e)}")
             return Response(
                 {"msg": "Failed to delete subscription"},

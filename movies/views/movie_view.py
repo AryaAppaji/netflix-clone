@@ -11,8 +11,11 @@ from ..serializers.movie_serializer import (
 )
 from rest_framework.pagination import PageNumberPagination
 from ..models import Movie
+from finance.models import UserSubscription
 import logging
 from users.authentication import ExpiringTokenAuthentication
+from django.utils.timezone import now
+from rest_framework.permissions import AllowAny, IsAdminUser
 
 
 class MoviePagination(PageNumberPagination):
@@ -22,9 +25,39 @@ class MoviePagination(PageNumberPagination):
 
 class MovieViewSet(ViewSet):
     authentication_classes = [ExpiringTokenAuthentication]
-    logger = logging.getLogger("django")
+    permission_classes = [IsAdminUser]
+    logger = logging.getLogger("custom")
+
+    def get_permissions(self):
+        if self.action == "list":
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAdminUser]
+
+        return [permission() for permission in permission_classes]
 
     def list(self, request):
+        if not request.user.is_superuser:
+            subscription = UserSubscription.objects.filter(
+                user=request.user, is_current_subscription=True
+            ).first()
+
+            if not subscription:
+                return Response(
+                    {
+                        "msg": "You don't have any subscription till now, Please purchase one"
+                    },
+                    status.HTTP_400_BAD_REQUEST,
+                )
+
+            if now() > subscription.end_date:
+                return Response(
+                    {
+                        "msg": "Your current subscription was expired, Please purchase new one"
+                    },
+                    status.HTTP_400_BAD_REQUEST,
+                )
+
         movies = Movie.objects.all()
         paginator = MoviePagination()
         paginated_movies = paginator.paginate_queryset(movies, request)

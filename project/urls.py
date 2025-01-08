@@ -22,10 +22,8 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
     SpectacularRedocView,
 )
-from users.views.authentication_view import (
-    LoginView,
-    LogoutView,
-)
+from users.views.registration_view import register_user
+from users.views.authentication_view import AuthViewSet
 from users.views.user_view import UserViewSet
 from movies.views.genre_view import GenreViewSet
 from movies.views.movie_view import MovieViewSet
@@ -35,6 +33,7 @@ from finance.views.payment_mode_view import PaymentModeViewSet
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
+router.register("auth", AuthViewSet, basename="auth")
 router.register(r"user", UserViewSet, basename="users")
 router.register(r"genre", GenreViewSet, basename="genres")
 router.register(r"subscription", SubscriptionViewSet, basename="subscriptions")
@@ -56,7 +55,6 @@ urlpatterns = [
         SpectacularSwaggerView.as_view(url_name="schema"),
         name="swagger",
     ),
-    path("api/login", LoginView.as_view(), name="login"),
-    path("api/logout", LogoutView.as_view(), name="logout"),
+    path("api/register", register_user, name="user_registration"),
     path("api/", include(router.urls)),
 ]

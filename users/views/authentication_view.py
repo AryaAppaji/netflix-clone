@@ -1,4 +1,4 @@
-from rest_framework.views import APIView
+from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from django.utils import timezone
 from datetime import timedelta
@@ -6,10 +6,12 @@ from ..models import ExpiringToken
 from ..serializers.login_serializer import LoginSerializer, UserDataSerializer
 from rest_framework import status
 from django.contrib.auth import authenticate
+from rest_framework.decorators import action
 
 
-class LoginView(APIView):
-    def post(self, request):
+class AuthViewSet(ViewSet):
+    @action(methods=["POST"], url_path="login", detail=False)
+    def login(self, request):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -31,9 +33,8 @@ class LoginView(APIView):
             status=status.HTTP_200_OK,
         )
 
-
-class LogoutView(APIView):
-    def post(self, request):
+    @action(methods=["POST"], url_path="logout", detail=False)
+    def logout(self, request):
         authorization_header = request.headers.get("Authorization", "")
 
         # Check if the Authorization header is missing

@@ -6,9 +6,7 @@ To use this template you should have `python 3.13` installed on your system and 
 
 ## Setup in your system.
 
-- Create a new repository using the `Use this template` button in this repository.
-
-- Next clone the repository into your local system.
+- clone the repository into your local system.
 
 - Then run the following commands:
 

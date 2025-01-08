@@ -1,0 +1,609 @@
+openapi: 3.0.3
+info:
+  title: Netflix clone
+  version: 1.0.0
+  description: This is a practice project on django
+paths:
+  /api/genre/:
+    get:
+      operationId: genre_retrieve
+      tags:
+        - genre
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          description: No response body
+    post:
+      operationId: genre_create
+      tags:
+        - genre
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "201":
+          description: No response body
+  /api/genre/{id}/:
+    get:
+      operationId: genre_retrieve_2
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+        - genre
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          description: No response body
+    put:
+      operationId: genre_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+        - genre
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          description: No response body
+    delete:
+      operationId: genre_destroy
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+        - genre
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "204":
+          description: No response body
+  /api/login:
+    post:
+      operationId: login_create
+      tags:
+        - login
+      security:
+        - cookieAuth: []
+        - basicAuth: []
+        - {}
+      responses:
+        "200":
+          description: No response body
+  /api/logout:
+    post:
+      operationId: logout_create
+      tags:
+        - logout
+      security:
+        - cookieAuth: []
+        - basicAuth: []
+        - {}
+      responses:
+        "200":
+          description: No response body
+  /api/movie/:
+    get:
+      operationId: movie_retrieve
+      tags:
+        - movie
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          description: No response body
+    post:
+      operationId: movie_create
+      tags:
+        - movie
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "201":
+          description: No response body
+  /api/movie/{id}/:
+    get:
+      operationId: movie_retrieve_2
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+        - movie
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          description: No response body
+    put:
+      operationId: movie_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+        - movie
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          description: No response body
+    delete:
+      operationId: movie_destroy
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+        - movie
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "204":
+          description: No response body
+  /api/payment-mode/:
+    get:
+      operationId: payment_mode_retrieve
+      tags:
+        - payment-mode
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          description: No response body
+    post:
+      operationId: payment_mode_create
+      tags:
+        - payment-mode
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "201":
+          description: No response body
+  /api/payment-mode/{id}/:
+    get:
+      operationId: payment_mode_retrieve_2
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+        - payment-mode
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          description: No response body
+    put:
+      operationId: payment_mode_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+        - payment-mode
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          description: No response body
+    delete:
+      operationId: payment_mode_destroy
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+        - payment-mode
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "204":
+          description: No response body
+  /api/review/:
+    get:
+      operationId: review_retrieve
+      tags:
+        - review
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          description: No response body
+    post:
+      operationId: review_create
+      tags:
+        - review
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "201":
+          description: No response body
+  /api/review/{id}/:
+    get:
+      operationId: review_retrieve_2
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+        - review
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          description: No response body
+    put:
+      operationId: review_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+        - review
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          description: No response body
+    delete:
+      operationId: review_destroy
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+        - review
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "204":
+          description: No response body
+  /api/schema/:
+    get:
+      operationId: schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+        - in: query
+          name: format
+          schema:
+            type: string
+            enum:
+              - json
+              - yaml
+        - in: query
+          name: lang
+          schema:
+            type: string
+            enum:
+              - af
+              - ar
+              - ar-dz
+              - ast
+              - az
+              - be
+              - bg
+              - bn
+              - br
+              - bs
+              - ca
+              - ckb
+              - cs
+              - cy
+              - da
+              - de
+              - dsb
+              - el
+              - en
+              - en-au
+              - en-gb
+              - eo
+              - es
+              - es-ar
+              - es-co
+              - es-mx
+              - es-ni
+              - es-ve
+              - et
+              - eu
+              - fa
+              - fi
+              - fr
+              - fy
+              - ga
+              - gd
+              - gl
+              - he
+              - hi
+              - hr
+              - hsb
+              - hu
+              - hy
+              - ia
+              - id
+              - ig
+              - io
+              - is
+              - it
+              - ja
+              - ka
+              - kab
+              - kk
+              - km
+              - kn
+              - ko
+              - ky
+              - lb
+              - lt
+              - lv
+              - mk
+              - ml
+              - mn
+              - mr
+              - ms
+              - my
+              - nb
+              - ne
+              - nl
+              - nn
+              - os
+              - pa
+              - pl
+              - pt
+              - pt-br
+              - ro
+              - ru
+              - sk
+              - sl
+              - sq
+              - sr
+              - sr-latn
+              - sv
+              - sw
+              - ta
+              - te
+              - tg
+              - th
+              - tk
+              - tr
+              - tt
+              - udm
+              - ug
+              - uk
+              - ur
+              - uz
+              - vi
+              - zh-hans
+              - zh-hant
+      tags:
+        - schema
+      security:
+        - cookieAuth: []
+        - basicAuth: []
+        - {}
+      responses:
+        "200":
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ""
+  /api/subscription/:
+    get:
+      operationId: subscription_retrieve
+      tags:
+        - subscription
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          description: No response body
+    post:
+      operationId: subscription_create
+      tags:
+        - subscription
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "201":
+          description: No response body
+  /api/subscription/{id}/:
+    get:
+      operationId: subscription_retrieve_2
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+        - subscription
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          description: No response body
+    put:
+      operationId: subscription_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+        - subscription
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          description: No response body
+    delete:
+      operationId: subscription_destroy
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+        - subscription
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "204":
+          description: No response body
+  /api/user/:
+    get:
+      operationId: user_retrieve
+      tags:
+        - user
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          description: No response body
+    post:
+      operationId: user_create
+      tags:
+        - user
+      security:
+        - {}
+      responses:
+        "201":
+          description: No response body
+  /api/user/{id}/:
+    get:
+      operationId: user_retrieve_2
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+        - user
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          description: No response body
+    put:
+      operationId: user_update
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+        - user
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "200":
+          description: No response body
+    delete:
+      operationId: user_destroy
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+        - user
+      security:
+        - tokenAuth: []
+        - {}
+      responses:
+        "204":
+          description: No response body
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"

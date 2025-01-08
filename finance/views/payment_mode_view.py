@@ -14,6 +14,7 @@ from ..models import PaymentMode
 from rest_framework.pagination import PageNumberPagination
 import logging
 from users.authentication import ExpiringTokenAuthentication
+from rest_framework.permissions import IsAdminUser
 
 
 class PaymentModePagination(PageNumberPagination):
@@ -24,6 +25,7 @@ class PaymentModePagination(PageNumberPagination):
 
 class PaymentModeViewSet(ViewSet):
     authentication_classes = [ExpiringTokenAuthentication]
+    permission_classes = [IsAdminUser]
 
     def list(self, request):
         payment_modes = PaymentMode.objects.all()
@@ -50,7 +52,7 @@ class PaymentModeViewSet(ViewSet):
         try:
             payment_mode.save()
         except Exception as e:
-            logger = logging.getLogger("django")
+            logger = logging.getLogger("custom")
             logger.error(f"Payment Mode Creation Failed: {str(e)}")
             return Response(
                 {"msg": "Payment Mode Creation Failed"},
@@ -80,7 +82,7 @@ class PaymentModeViewSet(ViewSet):
             payment_mode.status = serializer.validated_data["status"]
             payment_mode.save()
         except Exception as e:
-            logger = logging.getLogger("django")
+            logger = logging.getLogger("custom")
             logger.error(f"Payment Mode Update Failed: {str(e)}")
             return Response(
                 {"msg": "Payment mode update Failed"},
@@ -98,7 +100,7 @@ class PaymentModeViewSet(ViewSet):
         try:
             payment_mode.delete()
         except Exception as e:
-            logger = logging.getLogger("django")
+            logger = logging.getLogger("custom")
             logger.error(f"Payment Mode Deletion Failed: {str(e)}")
             return Response(
                 {"msg": "Payment Mode Deletion Failed"},

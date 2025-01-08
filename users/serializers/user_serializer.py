@@ -26,6 +26,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
             )
         ],
     )
+    is_superuser = serializers.BooleanField(required=False, default=False)
 
     class Meta:
         model = CustomUser
@@ -62,6 +63,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
             )
         ],
     )
+    is_superuser = serializers.BooleanField(required=False, default=False)
 
     class Meta:
         model = CustomUser

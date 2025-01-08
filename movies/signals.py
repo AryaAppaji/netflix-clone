@@ -21,5 +21,5 @@ def update_overall_rating(instance, **kwargs):
     try:
         movie.save()
     except Exception as e:
-        logger = logging.getLogger("django")
+        logger = logging.getLogger("custom")
         logger.error(f"Failed to update movie rating: {str(e)}")
