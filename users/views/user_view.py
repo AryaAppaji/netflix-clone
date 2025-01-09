@@ -16,6 +16,7 @@ from ..serializers.user_serializer import (
 from rest_framework.pagination import PageNumberPagination
 from users.authentication import ExpiringTokenAuthentication
 from rest_framework.permissions import IsAdminUser
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 
 # Pagination Class
@@ -29,6 +30,31 @@ logger = logging.getLogger("custom")
 
 
 # User ViewSet
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="Users List", description="Gives list of users"
+    ),
+    create=extend_schema(
+        operation_id="Create Users",
+        request={
+            "multipart/form-data": CreateUserSerializer,
+            "application/json": CreateUserSerializer,
+        },
+        description="Creates a user.",
+    ),
+    retrieve=extend_schema(operation_id="View User"),
+    update=extend_schema(
+        operation_id="Update User",
+        request={
+            "multipart/form-data": UpdateUserSerializer,
+            "application/json": UpdateUserSerializer,
+        },
+        description="Updates a user.",
+    ),
+    destroy=extend_schema(
+        operation_id="Delete User", description="Deletes a user."
+    ),
+)
 class UserViewSet(ViewSet):
     authentication_classes = [ExpiringTokenAuthentication]
     permission_classes = [IsAdminUser]

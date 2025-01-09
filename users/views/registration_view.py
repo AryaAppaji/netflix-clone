@@ -4,8 +4,17 @@ from rest_framework.decorators import api_view
 import logging
 from ..serializers.user_serializer import CreateUserSerializer
 from ..models import CustomUser
+from drf_spectacular.utils import extend_schema
 
 
+@extend_schema(
+    operation_id="Self Registration",
+    request={
+        "multipart/form-data": CreateUserSerializer,
+        "application/json": CreateUserSerializer,
+    },
+    description="This endpoint allows user to register by themselves",
+)
 @api_view(["POST"])
 def register_user(request):
     serializer = CreateUserSerializer(data=request.data)

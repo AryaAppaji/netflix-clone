@@ -1,441 +1,567 @@
 openapi: 3.0.3
 info:
-  title: Netflix clone
+  title: Netfilix Clone
   version: 1.0.0
   description: This is a practice project on django
 paths:
+  /api/auth/login/:
+    post:
+      operationId: login
+      description: This endpoint is used for login
+      tags:
+      - api
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - bearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/auth/logout/:
+    post:
+      operationId: logout
+      description: This endpoint is used to logout
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - bearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
   /api/genre/:
     get:
-      operationId: genre_retrieve
+      operationId: Movies List
+      description: Gives list of movies
       tags:
-        - genre
+      - api
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "200":
+        '200':
           description: No response body
     post:
-      operationId: genre_create
+      operationId: Create Movies
+      description: Creates a movie.
       tags:
-        - genre
+      - api
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateGenre'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGenre'
+        required: true
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "201":
+        '201':
           description: No response body
   /api/genre/{id}/:
     get:
-      operationId: genre_retrieve_2
+      operationId: View Movie
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
       tags:
-        - genre
+      - api
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "200":
+        '200':
           description: No response body
     put:
-      operationId: genre_update
+      operationId: Update Movie
+      description: Updates a movie.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
       tags:
-        - genre
+      - api
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateGenre'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateGenre'
+        required: true
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "200":
+        '200':
           description: No response body
     delete:
-      operationId: genre_destroy
+      operationId: Delete Movie
+      description: Deletes a movie.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
       tags:
-        - genre
+      - api
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "204":
-          description: No response body
-  /api/login:
-    post:
-      operationId: login_create
-      tags:
-        - login
-      security:
-        - cookieAuth: []
-        - basicAuth: []
-        - {}
-      responses:
-        "200":
-          description: No response body
-  /api/logout:
-    post:
-      operationId: logout_create
-      tags:
-        - logout
-      security:
-        - cookieAuth: []
-        - basicAuth: []
-        - {}
-      responses:
-        "200":
+        '204':
           description: No response body
   /api/movie/:
     get:
-      operationId: movie_retrieve
+      operationId: Movies List_2
+      description: Gives list of movies
       tags:
-        - movie
+      - api
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           description: No response body
     post:
-      operationId: movie_create
+      operationId: Create Movies_2
+      description: Creates a movie.
       tags:
-        - movie
+      - api
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateMovie'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMovie'
+        required: true
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "201":
+        '201':
           description: No response body
   /api/movie/{id}/:
     get:
-      operationId: movie_retrieve_2
+      operationId: View Movie_2
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
       tags:
-        - movie
+      - api
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "200":
+        '200':
           description: No response body
     put:
-      operationId: movie_update
+      operationId: Update Movie_2
+      description: Updates a movie.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
       tags:
-        - movie
+      - api
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateMovie'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMovie'
+        required: true
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "200":
+        '200':
           description: No response body
     delete:
-      operationId: movie_destroy
+      operationId: Delete Movie_2
+      description: Deletes a movie.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
       tags:
-        - movie
+      - api
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "204":
+        '204':
           description: No response body
   /api/payment-mode/:
     get:
-      operationId: payment_mode_retrieve
+      operationId: Payment Modes List
+      description: Gives list of payment modes
       tags:
-        - payment-mode
+      - api
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "200":
+        '200':
           description: No response body
     post:
-      operationId: payment_mode_create
+      operationId: Create Payment Mode
+      description: Creates a payment mode.
       tags:
-        - payment-mode
+      - api
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentMode'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentMode'
+        required: true
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "201":
+        '201':
           description: No response body
   /api/payment-mode/{id}/:
     get:
-      operationId: payment_mode_retrieve_2
+      operationId: View Payment Mode
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
       tags:
-        - payment-mode
+      - api
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "200":
+        '200':
           description: No response body
     put:
-      operationId: payment_mode_update
+      operationId: Update Payment Mode
+      description: Updates a payment mode.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
       tags:
-        - payment-mode
+      - api
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdatePaymentMode'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePaymentMode'
+        required: true
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "200":
+        '200':
           description: No response body
     delete:
-      operationId: payment_mode_destroy
+      operationId: Delete Payment Mode
+      description: Deletes a payment mode.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
       tags:
-        - payment-mode
+      - api
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "204":
+        '204':
+          description: No response body
+  /api/register:
+    post:
+      operationId: Self Registration
+      description: This endpoint allows user to register by themselves
+      tags:
+      - api
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - bearerAuth: []
+      - {}
+      responses:
+        '200':
           description: No response body
   /api/review/:
     get:
-      operationId: review_retrieve
+      operationId: Reviews List
+      description: Gives list of reviews
       tags:
-        - review
+      - api
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "200":
+        '200':
           description: No response body
     post:
-      operationId: review_create
+      operationId: Create Review
+      description: Creates a review.
       tags:
-        - review
+      - api
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateMovieReview'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMovieReview'
+        required: true
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "201":
+        '201':
           description: No response body
   /api/review/{id}/:
     get:
-      operationId: review_retrieve_2
+      operationId: View Review
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
       tags:
-        - review
+      - api
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "200":
+        '200':
           description: No response body
     put:
-      operationId: review_update
+      operationId: Update Review
+      description: Updates a review.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
       tags:
-        - review
+      - api
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateMovieReview'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMovieReview'
+        required: true
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "200":
+        '200':
           description: No response body
     delete:
-      operationId: review_destroy
+      operationId: Delete Review
+      description: Deletes a review.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
       tags:
-        - review
+      - api
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "204":
+        '204':
           description: No response body
   /api/schema/:
     get:
-      operationId: schema_retrieve
+      operationId: api_schema_retrieve
       description: |-
         OpenApi3 schema for this API. Format can be selected via content negotiation.
 
         - YAML: application/vnd.oai.openapi
         - JSON: application/vnd.oai.openapi+json
       parameters:
-        - in: query
-          name: format
-          schema:
-            type: string
-            enum:
-              - json
-              - yaml
-        - in: query
-          name: lang
-          schema:
-            type: string
-            enum:
-              - af
-              - ar
-              - ar-dz
-              - ast
-              - az
-              - be
-              - bg
-              - bn
-              - br
-              - bs
-              - ca
-              - ckb
-              - cs
-              - cy
-              - da
-              - de
-              - dsb
-              - el
-              - en
-              - en-au
-              - en-gb
-              - eo
-              - es
-              - es-ar
-              - es-co
-              - es-mx
-              - es-ni
-              - es-ve
-              - et
-              - eu
-              - fa
-              - fi
-              - fr
-              - fy
-              - ga
-              - gd
-              - gl
-              - he
-              - hi
-              - hr
-              - hsb
-              - hu
-              - hy
-              - ia
-              - id
-              - ig
-              - io
-              - is
-              - it
-              - ja
-              - ka
-              - kab
-              - kk
-              - km
-              - kn
-              - ko
-              - ky
-              - lb
-              - lt
-              - lv
-              - mk
-              - ml
-              - mn
-              - mr
-              - ms
-              - my
-              - nb
-              - ne
-              - nl
-              - nn
-              - os
-              - pa
-              - pl
-              - pt
-              - pt-br
-              - ro
-              - ru
-              - sk
-              - sl
-              - sq
-              - sr
-              - sr-latn
-              - sv
-              - sw
-              - ta
-              - te
-              - tg
-              - th
-              - tk
-              - tr
-              - tt
-              - udm
-              - ug
-              - uk
-              - ur
-              - uz
-              - vi
-              - zh-hans
-              - zh-hant
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - ug
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
       tags:
-        - schema
+      - api
       security:
-        - cookieAuth: []
-        - basicAuth: []
-        - {}
+      - cookieAuth: []
+      - basicAuth: []
+      - bearerAuth: []
+      - {}
       responses:
-        "200":
+        '200':
           content:
             application/vnd.oai.openapi:
               schema:
@@ -453,147 +579,528 @@ paths:
               schema:
                 type: object
                 additionalProperties: {}
-          description: ""
+          description: ''
   /api/subscription/:
     get:
-      operationId: subscription_retrieve
+      operationId: Payment Modes List_2
+      description: Gives list of payment modes
       tags:
-        - subscription
+      - api
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "200":
+        '200':
           description: No response body
     post:
-      operationId: subscription_create
+      operationId: Create Payment Mode_2
+      description: Creates a payment mode.
       tags:
-        - subscription
+      - api
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateSubscription'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSubscription'
+        required: true
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "201":
+        '201':
           description: No response body
   /api/subscription/{id}/:
     get:
-      operationId: subscription_retrieve_2
+      operationId: View Payment Mode_2
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
       tags:
-        - subscription
+      - api
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "200":
+        '200':
           description: No response body
     put:
-      operationId: subscription_update
+      operationId: Update Payment Mode_2
+      description: Updates a payment mode.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
       tags:
-        - subscription
+      - api
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateSubscription'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSubscription'
+        required: true
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "200":
+        '200':
           description: No response body
     delete:
-      operationId: subscription_destroy
+      operationId: Delete Payment Mode_2
+      description: Deletes a payment mode.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
       tags:
-        - subscription
+      - api
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "204":
+        '204':
           description: No response body
   /api/user/:
     get:
-      operationId: user_retrieve
+      operationId: Users List
+      description: Gives list of users
       tags:
-        - user
+      - api
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "200":
+        '200':
           description: No response body
     post:
-      operationId: user_create
+      operationId: Create Users
+      description: Creates a user.
       tags:
-        - user
+      - api
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+        required: true
       security:
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "201":
+        '201':
           description: No response body
   /api/user/{id}/:
     get:
-      operationId: user_retrieve_2
+      operationId: View User
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
       tags:
-        - user
+      - api
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "200":
+        '200':
           description: No response body
     put:
-      operationId: user_update
+      operationId: Update User
+      description: Updates a user.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
       tags:
-        - user
+      - api
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+        required: true
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "200":
+        '200':
           description: No response body
     delete:
-      operationId: user_destroy
+      operationId: Delete User
+      description: Deletes a user.
       parameters:
-        - in: path
-          name: id
-          schema:
-            type: string
-          required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
       tags:
-        - user
+      - api
       security:
-        - tokenAuth: []
-        - {}
+      - tokenAuth: []
+      - bearerAuth: []
       responses:
-        "204":
+        '204':
           description: No response body
 components:
+  schemas:
+    CreateGenre:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 30
+        status:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - name
+      - status
+      - updated_at
+    CreateMovie:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 30
+        release_year:
+          type: integer
+        description:
+          type: string
+          maxLength: 1000
+        genres:
+          type: array
+          items:
+            type: integer
+        file:
+          type: string
+          format: uri
+          pattern: (?:mp4)$
+        average_rating:
+          type: number
+          format: double
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - description
+      - file
+      - genres
+      - id
+      - name
+      - release_year
+      - updated_at
+    CreateMovieReview:
+      type: object
+      properties:
+        movie:
+          type: integer
+        rating:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 10
+        content:
+          type: string
+          maxLength: 1000
+      required:
+      - content
+      - movie
+      - rating
+    CreatePaymentMode:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 30
+        status:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - name
+      - status
+      - updated_at
+    CreateSubscription:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 30
+        price:
+          type: number
+          format: double
+        validity:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - name
+      - price
+      - updated_at
+      - validity
+    CreateUser:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 30
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          maxLength: 30
+        mobile_number:
+          type: string
+          pattern: ^\d{10}$
+        is_superuser:
+          type: boolean
+          default: false
+      required:
+      - email
+      - mobile_number
+      - password
+      - username
+    Login:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          writeOnly: true
+        device:
+          type: string
+      required:
+      - device
+      - password
+      - username
+    UpdateGenre:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 30
+        status:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - name
+      - status
+      - updated_at
+    UpdateMovie:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 30
+        release_year:
+          type: integer
+        description:
+          type: string
+          maxLength: 1000
+        genres:
+          type: array
+          items:
+            type: integer
+        file:
+          type: string
+          format: uri
+          pattern: (?:mp4)$
+        average_rating:
+          type: number
+          format: double
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - description
+      - file
+      - genres
+      - id
+      - name
+      - release_year
+      - updated_at
+    UpdateMovieReview:
+      type: object
+      properties:
+        rating:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 10
+        content:
+          type: string
+          maxLength: 1000
+      required:
+      - content
+      - rating
+    UpdatePaymentMode:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 30
+        status:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - name
+      - status
+      - updated_at
+    UpdateSubscription:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 30
+        price:
+          type: number
+          format: double
+        validity:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - name
+      - price
+      - updated_at
+      - validity
+    UpdateUser:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 30
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          maxLength: 30
+        mobile_number:
+          type: string
+          pattern: ^\d{10}$
+        is_superuser:
+          type: boolean
+          default: false
+      required:
+      - email
+      - mobile_number
+      - password
+      - username
   securitySchemes:
     basicAuth:
       type: http
@@ -603,7 +1110,5 @@ components:
       in: cookie
       name: sessionid
     tokenAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-      description: Token-based authentication with required prefix "Token"
+      type: http
+      scheme: bearer

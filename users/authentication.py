@@ -5,6 +5,7 @@ from .models import ExpiringToken
 
 class ExpiringTokenAuthentication(TokenAuthentication):
     model = ExpiringToken
+    keyword = "Bearer"
 
     def authenticate(self, request):
         """

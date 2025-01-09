@@ -64,7 +64,7 @@ LOGGING = {
         "level": "DEBUG",  # Capture all logs starting from DEBUG
     },
     "loggers": {
-        "custom": {
+        "django": {
             "handlers": [
                 "file"
             ],  # Attach the file handler for Django-specific logs
@@ -80,10 +80,22 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Your Project Name",
-    "DESCRIPTION": "Your Project Description",
+    "TITLE": "Netfilix Clone",
+    "DESCRIPTION": "This is a practice project on django",
     "VERSION": "1.0.0",
-    "SCHEMA_PATH_PREFIX": "/api/",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "SECURITY": [
+        {"bearerAuth": []}
+    ],  # Specifies the use of Bearer token for authentication
+    "COMPONENTS": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",  # Uses the Bearer authentication scheme
+                "bearerFormat": "",  # No need for JWT format here
+            },
+        },
+    },
 }
 
 APPEND_SLASH = True
