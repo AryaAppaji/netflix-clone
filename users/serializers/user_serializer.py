@@ -30,7 +30,13 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = "__all__"
+        fields = [
+            "username",
+            "email",
+            "password",
+            "mobile_number",
+            "is_superuser",
+        ]
 
 
 class RetrieveUserSerializer(serializers.ModelSerializer):
@@ -67,4 +73,10 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = "__all__"
+        fields = [
+            "username",
+            "email",
+            "password",
+            "mobile_number",
+            "is_superuser",
+        ]

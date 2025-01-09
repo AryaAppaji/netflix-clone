@@ -15,6 +15,7 @@ from rest_framework.pagination import PageNumberPagination
 import logging
 from users.authentication import ExpiringTokenAuthentication
 from rest_framework.permissions import IsAdminUser
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 
 class PaymentModePagination(PageNumberPagination):
@@ -23,6 +24,33 @@ class PaymentModePagination(PageNumberPagination):
     max_page_size = 25
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="Payment Modes List",
+        description="Gives list of payment modes",
+    ),
+    create=extend_schema(
+        operation_id="Create Payment Mode",
+        request={
+            "multipart/form-data": CreatePaymentModeSerializer,
+            "application/json": CreatePaymentModeSerializer,
+        },
+        description="Creates a payment mode.",
+    ),
+    retrieve=extend_schema(operation_id="View Payment Mode"),
+    update=extend_schema(
+        operation_id="Update Payment Mode",
+        request={
+            "multipart/form-data": UpdatePaymentModeSerializer,
+            "application/json": UpdatePaymentModeSerializer,
+        },
+        description="Updates a payment mode.",
+    ),
+    destroy=extend_schema(
+        operation_id="Delete Payment Mode",
+        description="Deletes a payment mode.",
+    ),
+)
 class PaymentModeViewSet(ViewSet):
     authentication_classes = [ExpiringTokenAuthentication]
     permission_classes = [IsAdminUser]

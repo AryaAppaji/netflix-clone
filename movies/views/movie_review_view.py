@@ -16,6 +16,7 @@ from users.models import ExpiringToken
 import logging
 from users.authentication import ExpiringTokenAuthentication
 from rest_framework.permissions import IsAdminUser
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 
 class MovieReviewPagination(PageNumberPagination):
@@ -23,6 +24,31 @@ class MovieReviewPagination(PageNumberPagination):
     page_size_query_param = "page_size"
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="Reviews List", description="Gives list of reviews"
+    ),
+    create=extend_schema(
+        operation_id="Create Review",
+        request={
+            "multipart/form-data": CreateMovieReviewSerializer,
+            "application/json": CreateMovieReviewSerializer,
+        },
+        description="Creates a review.",
+    ),
+    retrieve=extend_schema(operation_id="View Review"),
+    update=extend_schema(
+        operation_id="Update Review",
+        request={
+            "multipart/form-data": UpdateMovieReviewSerializer,
+            "application/json": UpdateMovieReviewSerializer,
+        },
+        description="Updates a review.",
+    ),
+    destroy=extend_schema(
+        operation_id="Delete Review", description="Deletes a review."
+    ),
+)
 class MovieReviewViewSet(ViewSet):
     authentication_classes = [ExpiringTokenAuthentication]
     permission_classes = [IsAdminUser]

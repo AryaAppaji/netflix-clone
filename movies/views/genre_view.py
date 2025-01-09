@@ -15,6 +15,7 @@ from ..serializers.genre_serializer import (
 )
 from users.authentication import ExpiringTokenAuthentication
 from rest_framework.permissions import IsAdminUser
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 
 class GenrePagination(PageNumberPagination):
@@ -23,6 +24,31 @@ class GenrePagination(PageNumberPagination):
     max_page_size = 25
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="Movies List", description="Gives list of movies"
+    ),
+    create=extend_schema(
+        operation_id="Create Movies",
+        request={
+            "multipart/form-data": CreateGenreSerializer,
+            "application/json": CreateGenreSerializer,
+        },
+        description="Creates a movie.",
+    ),
+    retrieve=extend_schema(operation_id="View Movie"),
+    update=extend_schema(
+        operation_id="Update Movie",
+        request={
+            "multipart/form-data": UpdateGenreSerializer,
+            "application/json": UpdateGenreSerializer,
+        },
+        description="Updates a movie.",
+    ),
+    destroy=extend_schema(
+        operation_id="Delete Movie", description="Deletes a movie."
+    ),
+)
 class GenreViewSet(ViewSet):
     authentication_classes = [ExpiringTokenAuthentication]
     permission_classes = [IsAdminUser]

@@ -15,6 +15,7 @@ import logging
 from ..models import Subscription
 from users.authentication import ExpiringTokenAuthentication
 from rest_framework.permissions import IsAdminUser
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 
 class SubscriptionPagination(PageNumberPagination):
@@ -23,6 +24,33 @@ class SubscriptionPagination(PageNumberPagination):
     max_page_size = 25
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="Payment Modes List",
+        description="Gives list of payment modes",
+    ),
+    create=extend_schema(
+        operation_id="Create Payment Mode",
+        request={
+            "multipart/form-data": CreateSubscriptionSerializer,
+            "application/json": CreateSubscriptionSerializer,
+        },
+        description="Creates a payment mode.",
+    ),
+    retrieve=extend_schema(operation_id="View Payment Mode"),
+    update=extend_schema(
+        operation_id="Update Payment Mode",
+        request={
+            "multipart/form-data": UpdateSubscriptionSerializer,
+            "application/json": UpdateSubscriptionSerializer,
+        },
+        description="Updates a payment mode.",
+    ),
+    destroy=extend_schema(
+        operation_id="Delete Payment Mode",
+        description="Deletes a payment mode.",
+    ),
+)
 class SubscriptionViewSet(ViewSet):
     authentication_classes = [ExpiringTokenAuthentication]
     permission_classes = [IsAdminUser]

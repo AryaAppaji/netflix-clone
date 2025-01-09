@@ -16,6 +16,7 @@ import logging
 from users.authentication import ExpiringTokenAuthentication
 from django.utils.timezone import now
 from rest_framework.permissions import AllowAny, IsAdminUser
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 
 class MoviePagination(PageNumberPagination):
@@ -23,6 +24,31 @@ class MoviePagination(PageNumberPagination):
     page_size_query_param = "page_size"
 
 
+@extend_schema_view(
+    list=extend_schema(
+        operation_id="Movies List", description="Gives list of movies"
+    ),
+    create=extend_schema(
+        operation_id="Create Movies",
+        request={
+            "multipart/form-data": CreateMovieSerializer,
+            "application/json": CreateMovieSerializer,
+        },
+        description="Creates a movie.",
+    ),
+    retrieve=extend_schema(operation_id="View Movie"),
+    update=extend_schema(
+        operation_id="Update Movie",
+        request={
+            "multipart/form-data": UpdateMovieSerializer,
+            "application/json": UpdateMovieSerializer,
+        },
+        description="Updates a movie.",
+    ),
+    destroy=extend_schema(
+        operation_id="Delete Movie", description="Deletes a movie."
+    ),
+)
 class MovieViewSet(ViewSet):
     authentication_classes = [ExpiringTokenAuthentication]
     permission_classes = [IsAdminUser]

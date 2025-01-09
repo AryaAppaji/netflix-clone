@@ -7,8 +7,22 @@ from ..serializers.login_serializer import LoginSerializer, UserDataSerializer
 from rest_framework import status
 from django.contrib.auth import authenticate
 from rest_framework.decorators import action
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 
+@extend_schema_view(
+    login=extend_schema(
+        operation_id="login",
+        request={
+            "multipart/form-data": LoginSerializer,
+            "application/json": LoginSerializer,
+        },
+        description="This endpoint is used for login",
+    ),
+    logout=extend_schema(
+        operation_id="logout", description="This endpoint is used to logout"
+    ),
+)
 class AuthViewSet(ViewSet):
     @action(methods=["POST"], url_path="login", detail=False)
     def login(self, request):
