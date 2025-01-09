@@ -17,9 +17,11 @@ This project demonstrates the use of the following key DRF concepts:
 7. **Pagination**
 8. **Environment Variable Management**
 9. **Signals**
-10. **API Documentation with `drf-spectacular`**
+10. **Email Sending with Mailtrap TEST API**
+11. **Permissions**
+12. **API Documentation with `drf-spectacular`**
 
 ## Acknowledgments
 
 - Parts of this project are inspired by the [HackSoft Styleguide Example](https://github.com/HackSoftware/Django-Styleguide-Example), licensed under the MIT License.
-- The project structure is derived from [DRF API Kickstart](https://github.com/AryaAppaji/drf-api-kickstart), also licensed under the MIT License.
+- The project structure is derived from my own repository[DRF API Kickstart](https://github.com/AryaAppaji/drf-api-kickstart), also licensed under the MIT License.
