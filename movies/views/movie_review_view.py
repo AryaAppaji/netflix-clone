@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import status
@@ -54,12 +55,25 @@ class MovieReviewViewSet(ViewSet):
     permission_classes = [IsAdminUser]
 
     def list(self, request):
-        movies = Review.objects.all()
+        # Cache key for the list of reviews
+        cache_key = "movie_reviews_list"
+
+        # Try to get the cached list
+        cached_reviews = cache.get(cache_key)
+        if cached_reviews:
+            return Response(cached_reviews, status.HTTP_200_OK)
+
+        # If not cached, fetch the reviews and cache the result
+        reviews = Review.objects.all()
         paginator = MovieReviewPagination()
-        paginated_movies = paginator.paginate_queryset(movies, request)
+        paginated_reviews = paginator.paginate_queryset(reviews, request)
         serialized_data = MovieReviewListSerializer(
-            paginated_movies, many=True
+            paginated_reviews, many=True
         ).data
+
+        # Cache the paginated reviews for 10 minutes
+        cache.set(cache_key, serialized_data)
+
         return paginator.get_paginated_response(serialized_data)
 
     def create(self, request):
@@ -82,21 +96,33 @@ class MovieReviewViewSet(ViewSet):
             review.save()
         except Exception as e:
             logger = logging.getLogger("custom")
-            logger.error(f"Review Cretion Failed:{str(e)}")
+            logger.error(f"Review Creation Failed:{str(e)}")
             return Response(
                 {"msg": "Failed to add review"},
                 status.HTTP_417_EXPECTATION_FAILED,
             )
         return Response(
             {"msg": "Review added successfully"},
-            status.HTTP_417_EXPECTATION_FAILED,
+            status.HTTP_201_CREATED,
         )
 
     def retrieve(self, request, pk):
+        # Cache key for individual review
+        cache_key = f"movie_review_{pk}_cache"
+
+        # Try to get the cached review
+        cached_result = cache.get(cache_key)
+        if cached_result:
+            return Response(cached_result, status.HTTP_200_OK)
+
+        # Otherwise, fetch the review and serialize
         review = get_object_or_404(Review, pk=pk)
-        return Response(
-            RetrieveMovieReviewSerializer(review).data, status.HTTP_200_OK
-        )
+        serialized_data = RetrieveMovieReviewSerializer(review).data
+
+        # Cache the individual review for 10 minutes
+        cache.set(cache_key, serialized_data)
+
+        return Response(serialized_data, status.HTTP_200_OK)
 
     def update(self, request, pk):
         serializer = UpdateMovieReviewSerializer(data=request.data)
@@ -113,11 +139,16 @@ class MovieReviewViewSet(ViewSet):
             review.save()
         except Exception as e:
             logger = logging.getLogger("custom")
-            logger.error(f"Review Cretion Failed:{str(e)}")
+            logger.error(f"Review Creation Failed:{str(e)}")
             return Response(
-                {"msg": "Failed to add review"},
+                {"msg": "Failed to update review"},
                 status.HTTP_417_EXPECTATION_FAILED,
             )
+
+        # Invalidate both the cached review and the list cache
+        cache.delete(f"movie_review_{pk}_cache")
+        cache.delete("movie_reviews_list")
+
         return Response(
             {"msg": "Review updated successfully"},
             status.HTTP_200_OK,
@@ -135,4 +166,9 @@ class MovieReviewViewSet(ViewSet):
                 {"msg": "Failed to delete review"},
                 status.HTTP_417_EXPECTATION_FAILED,
             )
-        return Response(None, status.HTTP_417_EXPECTATION_FAILED)
+
+        # Invalidate both the cached review and the list cache
+        cache.delete(f"movie_review_{pk}_cache")
+        cache.delete("movie_reviews_list")
+
+        return Response(None, status.HTTP_204_NO_CONTENT)

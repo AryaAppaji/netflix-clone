@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 import logging
 from ..models import Genre
 from rest_framework.pagination import PageNumberPagination
+from django.core.cache import cache
 
 # Import serializers
 from ..serializers.genre_serializer import (
@@ -54,10 +55,23 @@ class GenreViewSet(ViewSet):
     permission_classes = [IsAdminUser]
 
     def list(self, request):
+        # Cache key for the genre list
+        cache_key = "genre_list_cache"
+
+        # Try to get the cached genre list
+        cached_result = cache.get(cache_key)
+        if cached_result:
+            # Return the cached genre list if available
+            return Response(cached_result, status.HTTP_200_OK)
+
+        # Otherwise, fetch genres and serialize
         genres = Genre.objects.all()
         serialized_data = GenreListSerializer(genres, many=True).data
         paginator = GenrePagination()
         paginator.paginate_queryset(genres, request)
+
+        # Cache the genre list for 5 minutes
+        cache.set(cache_key, serialized_data)
 
         return paginator.get_paginated_response(serialized_data)
 
@@ -82,13 +96,31 @@ class GenreViewSet(ViewSet):
                 {"msg": "Genre Creation Failed"},
                 status.HTTP_417_EXPECTATION_FAILED,
             )
+
+        # Invalidate both the genre list and the individual genre cache
+        cache.delete("genre_list_cache")
+
         return Response(
             {"msg": "Genre Created Successfully"}, status.HTTP_201_CREATED
         )
 
     def retrieve(self, request, pk):
+        # Cache key for an individual genre
+        cache_key = f"genre_{pk}_cache"
+
+        # Try to get the cached genre
+        cached_result = cache.get(cache_key)
+        if cached_result:
+            # Return the cached genre if available
+            return Response(cached_result, status.HTTP_200_OK)
+
+        # Otherwise, fetch the genre and serialize
         genre = get_object_or_404(Genre, id=pk)
         serialized_data = RetrieveGenreSerializer(genre).data
+
+        # Cache the individual genre for 10 minutes
+        cache.set(cache_key, serialized_data)
+
         return Response(serialized_data, status.HTTP_200_OK)
 
     def update(self, request, pk):
@@ -111,6 +143,10 @@ class GenreViewSet(ViewSet):
                 {"msg": str(e)}, status=status.HTTP_417_EXPECTATION_FAILED
             )
 
+        # Invalidate the cache for both the specific genre and the genre list
+        cache.delete(f"genre_{pk}_cache")
+        cache.delete("genre_list_cache")
+
         return Response(
             {"msg": "Genre Update Successfully"}, status=status.HTTP_200_OK
         )
@@ -127,5 +163,9 @@ class GenreViewSet(ViewSet):
                 {"msg": "Genre Deletion Failed"},
                 status.HTTP_417_EXPECTATION_FAILED,
             )
+
+        # Invalidate the cache for both the specific genre and the genre list
+        cache.delete(f"genre_{pk}_cache")
+        cache.delete("genre_list_cache")
 
         return Response(None, status.HTTP_204_NO_CONTENT)

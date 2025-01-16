@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import status
@@ -56,12 +57,26 @@ class PaymentModeViewSet(ViewSet):
     permission_classes = [IsAdminUser]
 
     def list(self, request):
+        # Cache key for the list of payment modes
+        cache_key = "payment_modes_list"
+
+        # Try to get the cached payment modes list
+        cached_payment_modes = cache.get(cache_key)
+        if cached_payment_modes:
+            return Response(cached_payment_modes, status.HTTP_200_OK)
+
+        # If not cached, fetch the payment modes and cache the result
         payment_modes = PaymentMode.objects.all()
         serialized_data = PaymentModeListSerializer(
             payment_modes, many=True
         ).data
         paginator = PaymentModePagination()
-        paginator.paginate_queryset(payment_modes, request)
+        paginated_payment_modes = paginator.paginate_queryset(
+            payment_modes, request
+        )
+
+        # Cache the paginated payment modes for 10 minutes
+        cache.set(cache_key, serialized_data)
 
         return paginator.get_paginated_response(serialized_data)
 
@@ -92,8 +107,21 @@ class PaymentModeViewSet(ViewSet):
         )
 
     def retrieve(self, request, pk):
+        # Cache key for individual payment mode
+        cache_key = f"payment_mode_{pk}_cache"
+
+        # Try to get the cached payment mode
+        cached_result = cache.get(cache_key)
+        if cached_result:
+            return Response(cached_result, status.HTTP_200_OK)
+
+        # Otherwise, fetch the payment mode and serialize it
         payment_mode = get_object_or_404(PaymentMode, id=pk)
         serialized_data = RetrievePaymentModeSerializer(payment_mode).data
+
+        # Cache the individual payment mode for 10 minutes
+        cache.set(cache_key, serialized_data)
+
         return Response(serialized_data, status.HTTP_200_OK)
 
     def update(self, request, pk):
@@ -117,6 +145,10 @@ class PaymentModeViewSet(ViewSet):
                 status=status.HTTP_417_EXPECTATION_FAILED,
             )
 
+        # Invalidate the cache for both the specific payment mode and the list cache
+        cache.delete(f"payment_mode_{pk}_cache")
+        cache.delete("payment_modes_list")
+
         return Response(
             {"msg": "Payment Mode Update Successfully"},
             status=status.HTTP_200_OK,
@@ -132,7 +164,11 @@ class PaymentModeViewSet(ViewSet):
             logger.error(f"Payment Mode Deletion Failed: {str(e)}")
             return Response(
                 {"msg": "Payment Mode Deletion Failed"},
-                status.HTTP_417_EXPECTATION_FAILED,
+                status=status.HTTP_417_EXPECTATION_FAILED,
             )
+
+        # Invalidate the cache for both the specific payment mode and the list cache
+        cache.delete(f"payment_mode_{pk}_cache")
+        cache.delete("payment_modes_list")
 
         return Response(None, status.HTTP_204_NO_CONTENT)

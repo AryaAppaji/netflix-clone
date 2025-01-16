@@ -17,6 +17,8 @@ from users.authentication import ExpiringTokenAuthentication
 from django.utils.timezone import now
 from rest_framework.permissions import AllowAny, IsAdminUser
 from drf_spectacular.utils import extend_schema, extend_schema_view
+import os
+from django.core.cache import cache
 
 
 class MoviePagination(PageNumberPagination):
@@ -32,7 +34,6 @@ class MoviePagination(PageNumberPagination):
         operation_id="Create Movies",
         request={
             "multipart/form-data": CreateMovieSerializer,
-            "application/json": CreateMovieSerializer,
         },
         description="Creates a movie.",
     ),
@@ -41,7 +42,6 @@ class MoviePagination(PageNumberPagination):
         operation_id="Update Movie",
         request={
             "multipart/form-data": UpdateMovieSerializer,
-            "application/json": UpdateMovieSerializer,
         },
         description="Updates a movie.",
     ),
@@ -127,8 +127,22 @@ class MovieViewSet(ViewSet):
         )
 
     def retrieve(self, request, pk):
+        # Cache key for an individual movie
+        cache_key = f"movie_{pk}_cache"
+
+        # Try to get the cached movie
+        cached_result = cache.get(cache_key)
+        if cached_result:
+            # Return the cached movie if available
+            return Response(cached_result, status.HTTP_200_OK)
+
+        # Otherwise, fetch the movie and serialize
         movie = get_object_or_404(Movie, pk=pk)
         serialized_data = RetrieveMovieSerializer(movie).data
+
+        # Cache the individual movie for 10 minutes
+        cache.set(cache_key, serialized_data)
+
         return Response(serialized_data, status.HTTP_200_OK)
 
     def update(self, request, pk):
@@ -146,13 +160,22 @@ class MovieViewSet(ViewSet):
         movie.description = serializer.validated_data["description"]
 
         try:
-            movie.save()
             if "genres" in serializer.validated_data:
                 movie.genres.set(serializer.validated_data["genres"])
 
-            # Handle file upload to S3 using django-storages
-            file = request.FILES.get("file")
-            movie.file = file  # Assign file to movie instance
+            # Handle file upload (file is required)
+            new_file = request.FILES["file"]
+
+            # Delete the old file
+            if movie.file and movie.file.name:
+                old_file_path = os.path.join(
+                    settings.MEDIA_ROOT, movie.file.name
+                )
+                if os.path.exists(old_file_path):
+                    os.remove(old_file_path)
+
+            movie.file = new_file
+
             movie.save()
 
         except Exception as e:
@@ -161,6 +184,9 @@ class MovieViewSet(ViewSet):
                 {"msg": "Failed to update movie"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+        # Invalidate both the specific movie and movie list cache
+        cache.delete(f"movie_{pk}_cache")
 
         return Response(
             {"msg": "Movie updated successfully"},
@@ -178,4 +204,8 @@ class MovieViewSet(ViewSet):
                 {"msg": "Failed to delete movie"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+        # Invalidate both the specific movie and movie list cache
+        cache.delete(f"movie_{pk}_cache")
+
         return Response(None, status.HTTP_204_NO_CONTENT)
