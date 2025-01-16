@@ -17,6 +17,7 @@ from rest_framework.pagination import PageNumberPagination
 from users.authentication import ExpiringTokenAuthentication
 from rest_framework.permissions import IsAdminUser
 from drf_spectacular.utils import extend_schema, extend_schema_view
+from django.core.cache import cache
 
 
 # Pagination Class
@@ -61,10 +62,26 @@ class UserViewSet(ViewSet):
     pagination_class = UserPagination
 
     def list(self, request):
+        paginator = UserPagination()
+        # Cache key for paginated user list
+        cache_key = "user_list_cache"
+
+        # Try to get the cached result
+        cached_result = cache.get(cache_key)
+        if cached_result:
+            # Return cached result if it exists
+            return Response(cached_result, status.HTTP_200_OK)
+
+        # If not cached, fetch the users and serialize
         users = CustomUser.objects.all()
-        paginator = self.pagination_class()
+
         paginated_users = paginator.paginate_queryset(users, request)
         serialized_data = UserListSerializer(paginated_users, many=True).data
+
+        # Cache the result for 5 minutes
+        cache.set(cache_key, serialized_data)
+
+        # Return paginated response
         return paginator.get_paginated_response(serialized_data)
 
     def create(self, request):
@@ -74,7 +91,7 @@ class UserViewSet(ViewSet):
                 serializer.errors, status.HTTP_422_UNPROCESSABLE_ENTITY
             )
         try:
-            if self.validated_data["is_superuser"]:
+            if serializer.validated_data["is_superuser"]:
                 CustomUser.objects.create_superuser(
                     username=serializer.validated_data["username"],
                     email=serializer.validated_data["email"],
@@ -99,13 +116,31 @@ class UserViewSet(ViewSet):
                 status.HTTP_417_EXPECTATION_FAILED,
             )
 
+        # Invalidate the cache for the user list
+        cache.delete("user_list_cache")
+
         return Response(
             {"msg": "Registered Successfully"}, status.HTTP_201_CREATED
         )
 
     def retrieve(self, request, pk):
+        # Cache key for retrieving user by ID
+        cache_key = f"user_{pk}_cache"
+
+        # Try to get the cached user data
+        cached_result = cache.get(cache_key)
+        if cached_result:
+            # Return cached result if it exists
+            return Response(cached_result, status.HTTP_200_OK)
+
+        # If not cached, fetch the user and serialize
         user = get_object_or_404(CustomUser, id=pk)
         serialized_data = RetrieveUserSerializer(user).data
+
+        # Cache the result for 10 minutes
+        cache.set(cache_key, serialized_data)
+
+        # Return the serialized user data
         return Response(serialized_data, status.HTTP_200_OK)
 
     def update(self, request, pk):
@@ -131,6 +166,10 @@ class UserViewSet(ViewSet):
                 "is_superuser", False
             )
             user.save()
+
+            # Invalidate cache for the specific user and the user list
+            cache.delete(f"user_{pk}_cache")
+            cache.delete("user_list_cache")
         except Exception as e:
             logger.error(f"User Update Failed: {str(e)}")
             return Response(
@@ -146,6 +185,9 @@ class UserViewSet(ViewSet):
         user = get_object_or_404(CustomUser, id=pk)
         try:
             user.delete()
+            # Invalidate cache for the specific user and the user list
+            cache.delete(f"user_{pk}_cache")
+            cache.delete("user_list_cache")
         except Exception as e:
             logger.error(f"User Deletion Failed: {str(e)}")
             return Response(

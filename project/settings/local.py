@@ -125,7 +125,12 @@ DJANGO_SONAR = {
     ],
 }
 
-
-PHONEPE_MERCHANT_ID = "PGTESTPAYUAT"
-PHONEPE_SALT_KEY = "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399"
-PHONEPE_SALT_INDEX = "1"
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",  # Replace this with your redis location.
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
