@@ -19,9 +19,11 @@ This project demonstrates the use of the following key DRF concepts:
 9. **Signals**
 10. **Email Sending with Mailtrap TEST API**
 11. **Permissions**
-12. **API Documentation with `drf-spectacular`**
+12. **Caching with Redis**
+13. **API Documentation with `drf-spectacular`**
 
 ## Acknowledgments
 
 - Parts of this project are inspired by the [HackSoft Styleguide Example](https://github.com/HackSoftware/Django-Styleguide-Example), licensed under the MIT License.
+
 - The project structure is derived from my own repository[DRF API Kickstart](https://github.com/AryaAppaji/drf-api-kickstart), also licensed under the MIT License.
